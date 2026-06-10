@@ -1,0 +1,24 @@
+NOTICE
+
+Airport VIP Lounge Reservation Verification End-to-End Collaborative Console
+Copyright (c) 2026
+
+This project implements a comprehensive business tool for airport VIP lounge reservation
+rights verification, covering member benefits management, appointment records,
+flight time slots, companions, usage vouchers, and waiting list management.
+
+Technology Stack:
+- Frontend: Svelte + TypeScript + Vite + Svelte Stores + TanStack Table
+- Backend: Go + Fiber + SQLite
+
+Key Features:
+- Member benefit creation and lifecycle management
+- Rights verification workstation
+- Waiting list calculation and validation
+- Exception triage for expired rights
+- Flight time slot details with evidence and history
+- Statistical dashboard for verification pass rates
+- Companion batch import and review
+- Rule configuration with hit explanation and audit logs
+- Archive snapshots and export
+- Seed data browsing and health check endpoints
