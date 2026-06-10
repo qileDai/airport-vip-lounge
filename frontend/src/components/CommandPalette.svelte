@@ -108,7 +108,7 @@
     background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
-    padding-top: 15vh);
+    padding-top: 15vh;
     z-index: 1000;
     animation: fadeIn 0.2s ease-out;
   }

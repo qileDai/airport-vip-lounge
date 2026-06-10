@@ -1,5 +1,8 @@
 <script lang="ts">
   import { onMount } from 'svelte';
+  import AuditLogStream from './components/AuditLogStream.svelte';
+  import Dashboard from './pages/Dashboard.svelte';
+  import MemberBenefits from './pages/MemberBenefits.svelte';
   import { uiStore } from './stores';
 
   let activeTab = 'dashboard';
@@ -161,12 +164,6 @@
     </div>
   </main>
 </div>
-
-<script>
-  import Dashboard from './pages/Dashboard.svelte';
-  import MemberBenefits from './pages/MemberBenefits.svelte';
-  import AuditLogStream from './components/AuditLogStream.svelte';
-</script>
 
 <style>
   :global(*) {

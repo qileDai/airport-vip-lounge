@@ -13,7 +13,7 @@
   let showCreateModal = false;
   let editingItem: MemberBenefit | null = null;
   
-  const filters = [
+  let filters = [
     { key: 'status', label: '状态', type: 'select' as const, options: [
       { value: 'active', label: '活跃' },
       { value: 'expired', label: '已过期' },
@@ -106,6 +106,27 @@
     }
   }
 
+  function getFormValue(formData: FormData, key: string) {
+    return String(formData.get(key) ?? '');
+  }
+
+  function handleCreateSubmit(event: SubmitEvent) {
+    const form = event.currentTarget as HTMLFormElement;
+    const formData = new FormData(form);
+
+    handleSave({
+      name: getFormValue(formData, 'name'),
+      member_level: getFormValue(formData, 'member_level'),
+      remaining_quota: Number(formData.get('remaining_quota')),
+      valid_from: getFormValue(formData, 'valid_from'),
+      valid_until: getFormValue(formData, 'valid_until'),
+      owner: getFormValue(formData, 'owner'),
+      airport_code: getFormValue(formData, 'airport_code'),
+      lounge_id: getFormValue(formData, 'lounge_id'),
+      notes: getFormValue(formData, 'notes')
+    });
+  }
+
   async function handleDelete(id: number) {
     if (confirm('确认删除此记录？')) {
       try {
@@ -143,6 +164,33 @@
     { id: 'filter_expired', title: '筛选过期权益', category: '筛选', action: () => handleFilterChange({ status: 'expired' }) },
     { id: 'export', title: '导出数据', category: '导出', icon: '📤', action: () => uiStore.addNotification('导出功能开发中', 'info') },
   ];
+
+  function getStatusText(status: string): string {
+    const map: Record<string, string> = {
+      active: '活跃',
+      expired: '已过期',
+      pending_review: '待复核',
+      archived: '已归档',
+      rejected: '已驳回',
+      draft: '草稿'
+    };
+    return map[status] || status;
+  }
+
+  function getLevelText(level: string): string {
+    const map: Record<string, string> = {
+      platinum: '白金卡',
+      gold: '金卡',
+      silver: '银卡',
+      standard: '标准卡'
+    };
+    return map[level] || level;
+  }
+
+  function formatDate(dateStr: string): string {
+    if (!dateStr) return '-';
+    return new Date(dateStr).toLocaleDateString('zh-CN');
+  }
 </script>
 
 <div class="member-benefits-page">
@@ -347,20 +395,7 @@
           <button class="close-btn" on:click={() => showCreateModal = false}>✕</button>
         </div>
         
-        <form on:submit|preventDefault={(e) => {
-          const formData = new FormData(e.target as HTMLFormElement);
-          handleSave({
-            name: formData.get('name') as string,
-            member_level: formData.get('member_level') as string,
-            remaining_quota: Number(formData.get('remaining_quota')),
-            valid_from: formData.get('valid_from') as string,
-            valid_until: formData.get('valid_until') as string,
-            owner: formData.get('owner') as string,
-            airport_code: formData.get('airport_code') as string,
-            lounge_id: formData.get('lounge_id') as string,
-            notes: formData.get('notes') as string,
-          });
-        }}>
+        <form on:submit|preventDefault={handleCreateSubmit}>
           <div class="form-group">
             <label for="name">权益名称 *</label>
             <input type="text" id="name" name="name" required value={editingItem?.name || ''} placeholder="例如：2026年度白金贵宾厅权益"/>
@@ -434,35 +469,6 @@
     </div>
   {/if}
 </div>
-
-<script lang="ts">
-  function getStatusText(status: string): string {
-    const map: Record<string, string> = {
-      active: '活跃',
-      expired: '已过期',
-      pending_review: '待复核',
-      archived: '已归档',
-      rejected: '已驳回',
-      draft: '草稿'
-    };
-    return map[status] || status;
-  }
-
-  function getLevelText(level: string): string {
-    const map: Record<string, string> = {
-      platinum: '白金卡',
-      gold: '金卡',
-      silver: '银卡',
-      standard: '标准卡'
-    };
-    return map[level] || level;
-  }
-
-  function formatDate(dateStr: string): string {
-    if (!dateStr) return '-';
-    return new Date(dateStr).toLocaleDateString('zh-CN');
-  }
-</script>
 
 <style>
   .member-benefits-page {

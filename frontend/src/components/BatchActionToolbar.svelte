@@ -18,6 +18,15 @@
   function clearSelection() {
     dispatch('clearSelection');
   }
+
+  function handleSelectAllChange(event: Event) {
+    if ((event.currentTarget as HTMLInputElement).checked) {
+      selectAll();
+      return;
+    }
+
+    clearSelection();
+  }
   
   $: hasSelection = selectedItems.length > 0;
 </script>
@@ -29,7 +38,7 @@
         type="checkbox"
         id="select-all"
         checked={hasSelection}
-        on:change={(e) => (e.target as HTMLInputElement).checked ? selectAll() : clearSelection()}
+        on:change={handleSelectAllChange}
       />
       <label for="select-all">全选</label>
     </div>

@@ -10,6 +10,18 @@
     activeFilters = { ...activeFilters, [key]: value };
     dispatch('filterChange', activeFilters);
   }
+
+  function handleTextInputChange(key: string, event: Event) {
+    handleFilterChange(key, (event.currentTarget as HTMLInputElement).value);
+  }
+
+  function handleSelectChange(key: string, event: Event) {
+    handleFilterChange(key, (event.currentTarget as HTMLSelectElement).value);
+  }
+
+  function handleNumberInputChange(key: string, event: Event) {
+    handleFilterChange(key, Number((event.currentTarget as HTMLInputElement).value));
+  }
   
   function clearFilters() {
     activeFilters = {};
@@ -33,13 +45,13 @@
             class="filter-input"
             placeholder={`搜索${filter.label}...`}
             value={activeFilters[filter.key] || ''}
-            on:change={(e) => handleFilterChange(filter.key, (e.target as HTMLInputElement).value)}
+            on:change={(e) => handleTextInputChange(filter.key, e)}
           />
         {:else if filter.type === 'select'}
           <select
             class="filter-select"
             value={activeFilters[filter.key] || ''}
-            on:change={(e) => handleFilterChange(filter.key, (e.target as HTMLSelectElement).value)}
+            on:change={(e) => handleSelectChange(filter.key, e)}
           >
             <option value="">全部</option>
             {#each filter.options || [] as option}
@@ -51,7 +63,7 @@
             type="date"
             class="filter-input"
             value={activeFilters[filter.key] || ''}
-            on:change={(e) => handleFilterChange(filter.key, (e.target as HTMLInputElement).value)
+            on:change={(e) => handleTextInputChange(filter.key, e)}
           />
         {:else if filter.type === 'number'}
           <input
@@ -59,7 +71,7 @@
             class="filter-input"
             placeholder="输入数值"
             value={activeFilters[filter.key] || ''}
-            on:change={(e) => handleFilterChange(filter.key, Number((e.target as HTMLInputElement).value))}
+            on:change={(e) => handleNumberInputChange(filter.key, e)}
           />
         {/if}
       </div>
